@@ -28,23 +28,25 @@ function Trello(props) {
 
   // Xử lý get data api todos list
   useEffect(() => {
-    axios.get("http://localhost:3001/todos").then((response) => {
+    axios.get("https://trello-tenomad.herokuapp.com/todos").then((response) => {
       setDatas(response.data);
     });
   }, []);
 
   //Xử lý get data api users
   useEffect(() => {
-    axios.get("http://localhost:3001/users").then((response) => {
+    axios.get("https://trello-tenomad.herokuapp.com/users").then((response) => {
       setDataUsers(response.data);
     });
   }, []);
 
   //Lấy dữ liệu theo id button
   useEffect(() => {
-    axios.get(`http://localhost:3001/todos/${getDataById}`).then((response) => {
-      reset(response.data);
-    });
+    axios
+      .get(`https://trello-tenomad.herokuapp.com/todos/${getDataById}`)
+      .then((response) => {
+        reset(response.data);
+      });
   }, [getDataById]);
 
   //Xử lý validate input
@@ -74,7 +76,10 @@ function Trello(props) {
 
   //Xử lý Edit api
   const EditData = async (data) => {
-    await axios.put(`http://localhost:3001/todos/${getDataById}`, data);
+    await axios.put(
+      `https://trello-tenomad.herokuapp.com/${getDataById}`,
+      data
+    );
   };
 
   //Xử lý cột và lưu vị trí drag drop
@@ -126,14 +131,17 @@ function Trello(props) {
 
       //Xử lý chức năng thay đổi status completed (true <-> false) sau khi drop.
       axios
-        .get(`http://localhost:3001/todos/${result.draggableId}`)
+        .get(`https://trello-tenomad.herokuapp.com/todos/${result.draggableId}`)
         .then((response) => {
           const data = response.data;
           const dataComplete = response.data.completed;
-          axios.put(`http://localhost:3001/todos/${result.draggableId}`, {
-            ...data,
-            completed: !dataComplete,
-          });
+          axios.put(
+            `https://trello-tenomad.herokuapp.com/todos/${result.draggableId}`,
+            {
+              ...data,
+              completed: !dataComplete,
+            }
+          );
         });
     } else {
       const column = columns[source.droppableId];
