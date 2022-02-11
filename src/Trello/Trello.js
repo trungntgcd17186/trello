@@ -77,7 +77,7 @@ function Trello(props) {
   //Xử lý Edit api
   const EditData = async (data) => {
     await axios.put(
-      `https://trello-tenomad.herokuapp.com/${getDataById}`,
+      `https://trello-tenomad.herokuapp.com/todos/${getDataById}`,
       data
     );
   };
