@@ -8,7 +8,6 @@ import yup from "../Components/Validate/yupGlobal";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { v4 as uuidv4 } from "uuid";
 
 import TaskCard from "./TaskCard";
 
@@ -80,13 +79,17 @@ function Trello(props) {
 
   //Xử lý cột và lưu vị trí drag drop
   const columnsData = {
-    [uuidv4()]: {
+    ["column1"]: {
       title: "To-do",
-      items: datas,
+      items: datas.filter(
+        (task) => task.completed === false || task.completed === "false"
+      ),
     },
-    [uuidv4()]: {
+    ["column2"]: {
       title: "Completed",
-      items: [],
+      items: datas.filter(
+        (task) => task.completed === true || task.completed === "true"
+      ),
     },
   };
 
@@ -102,11 +105,13 @@ function Trello(props) {
     const { source, destination } = result;
     if (source.droppableId !== destination.droppableId) {
       const sourceColumn = columns[source.droppableId];
+
       const destColumn = columns[destination.droppableId];
       const sourceItems = [...sourceColumn.items];
       const destItems = [...destColumn.items];
       const [removed] = sourceItems.splice(source.index, 1);
       destItems.splice(destination.index, 0, removed);
+
       setColumns({
         ...columns,
         [source.droppableId]: {
@@ -118,6 +123,18 @@ function Trello(props) {
           items: destItems,
         },
       });
+
+      //Xử lý chức năng thay đổi status completed (true <-> false) sau khi drop.
+      axios
+        .get(`http://localhost:3001/todos/${result.draggableId}`)
+        .then((response) => {
+          const data = response.data;
+          const dataComplete = response.data.completed;
+          axios.put(`http://localhost:3001/todos/${result.draggableId}`, {
+            ...data,
+            completed: !dataComplete,
+          });
+        });
     } else {
       const column = columns[source.droppableId];
       const copiedItems = [...column.items];

@@ -4,28 +4,28 @@
       "userId": 1,
       "id": 1,
       "title": "delectus aut autem",
-      "completed": "true",
-      "assignee": "Leanne Graham"
+      "completed": false,
+      "assignee": "Clementine Bauch"
     },
     {
       "userId": 1,
       "id": 2,
       "title": "quis ut nam facilis et officia qui",
-      "completed": false,
+      "completed": "true",
       "assignee": "Ervin Howell"
     },
     {
       "userId": 1,
       "id": 3,
       "title": "fugiat veniam minus",
-      "completed": false,
+      "completed": true,
       "assignee": "Clementine Bauch"
     },
     {
       "userId": 1,
       "id": 4,
       "title": "et porro tempora",
-      "completed": true,
+      "completed": false,
       "assignee": "Patricia Lebsack"
     },
     {
@@ -39,21 +39,21 @@
       "userId": 1,
       "id": 6,
       "title": "dfgdfgdfgdfg",
-      "completed": false,
+      "completed": true,
       "assignee": "Nicholas Runolfsdottir V"
     },
     {
       "userId": 1,
       "id": 7,
       "title": "sdfsdf",
-      "completed": false,
+      "completed": true,
       "assignee": "Glenna Reichert"
     },
     {
       "userId": 1,
       "id": 8,
       "title": "sdfsdfsdgfdg",
-      "completed": true,
+      "completed": "false",
       "assignee": "Clementina DuBuque"
     },
     {
@@ -95,14 +95,14 @@
       "userId": 1,
       "id": 14,
       "title": "repellendus sunt dolores architecto voluptatum",
-      "completed": true,
+      "completed": false,
       "assignee": "Glenna Reichert"
     },
     {
       "userId": 1,
       "id": 15,
       "title": "ab voluptatum amet voluptas",
-      "completed": true,
+      "completed": false,
       "assignee": "Glenna Reichert"
     }
   ],
