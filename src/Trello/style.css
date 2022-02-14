@@ -1,3 +1,7 @@
+body {
+  font-size: 14px;
+}
+
 .container {
   display: flex;
 }
@@ -28,19 +32,19 @@
 .task-column {
   margin: 8px;
   display: flex;
-  width: 100%;
-  min-height: 80vh;
+  width: 50%;
+  height: auto;
 }
 
 .task-list {
-  min-height: 100px;
   display: flex;
+
   flex-direction: column;
   background: #f3f3f3;
-  min-width: 341px;
+  min-width: 300px;
   border-radius: 5px;
-  padding: 15px 15px;
-  margin-right: 45px;
+  padding: 10px 7px;
+  margin-right: 7px;
 }
 
 .title {
@@ -56,10 +60,13 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  padding: 0 15px;
-  min-height: 106px;
+  padding: 0 10px;
+  height: auto;
   border-radius: 5px;
   max-width: 311px;
   background: white;
-  margin-top: 15px;
+  margin-top: 7px;
+}
+.task-information > p {
+  margin-top: 5px;
 }

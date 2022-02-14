@@ -17,21 +17,21 @@ function Trello(props) {
 
   const [show, setShow] = useState(false);
   const [getDataById, setGetDataById] = useState("");
-
+  const [edit, setEdit] = useState(false);
   //Xử lý show modal
   const handleShow = (e) => {
-    console.log(e);
     setShow(true);
     setGetDataById(e.id);
   };
   const handleClose = () => setShow(false);
 
   // Xử lý get data api todos list
+
   useEffect(() => {
     axios.get("https://trello-tenomad.herokuapp.com/todos").then((response) => {
       setDatas(response.data);
     });
-  }, []);
+  }, [edit]);
 
   //Xử lý get data api users
   useEffect(() => {
@@ -70,8 +70,6 @@ function Trello(props) {
     EditData({
       ...data,
     });
-
-    window.location.reload();
   };
 
   //Xử lý Edit api
@@ -80,6 +78,7 @@ function Trello(props) {
       `https://trello-tenomad.herokuapp.com/todos/${getDataById}`,
       data
     );
+    setEdit(!edit);
   };
 
   //Xử lý cột và lưu vị trí drag drop

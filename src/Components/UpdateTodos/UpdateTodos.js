@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
-import axios from "axios";
+
 function UpdateTodos(props) {
   return (
     <div>
@@ -51,7 +51,7 @@ function UpdateTodos(props) {
             <Button variant="secondary" onClick={props.handleClose}>
               Close
             </Button>
-            <Button variant="primary" type="submit">
+            <Button variant="primary" type="submit" onClick={props.handleClose}>
               Save Changes
             </Button>
           </Modal.Footer>
