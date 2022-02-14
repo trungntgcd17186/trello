@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import UpdateTodos from "../Components/UpdateTodos/UpdateTodos";
 import "./style.css";
 
@@ -10,6 +10,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
 import TaskCard from "./TaskCard";
+import { Scrollbars } from "react-custom-scrollbars";
 
 function Trello(props) {
   const [datas, setDatas] = useState([]);
@@ -26,7 +27,6 @@ function Trello(props) {
   const handleClose = () => setShow(false);
 
   // Xử lý get data api todos list
-
   useEffect(() => {
     axios.get("https://trello-tenomad.herokuapp.com/todos").then((response) => {
       setDatas(response.data);
@@ -157,6 +157,12 @@ function Trello(props) {
     }
   };
 
+  const listRef = useRef();
+  const handleScroll = ({ target }) => {
+    const { scrollTop } = target;
+
+    listRef.current.scrollTo(scrollTop);
+  };
   return (
     <div>
       <DragDropContext
@@ -174,15 +180,21 @@ function Trello(props) {
                       {...provided.droppableProps}
                     >
                       <div className="title">{column.title}</div>
-                      {column.items.map((item, index) => (
-                        <TaskCard
-                          key={index}
-                          item={item}
-                          index={index}
-                          handleShow={handleShow}
-                        />
-                      ))}
-                      {provided.placeholder}
+                      <Scrollbars
+                        style={{ width: 250, height: 750 }}
+                        onScroll={handleScroll}
+                      >
+                        {column.items.map((item, index) => (
+                          <TaskCard
+                            ref={listRef}
+                            key={index}
+                            item={item}
+                            index={index}
+                            handleShow={handleShow}
+                          />
+                        ))}
+                        {provided.placeholder}
+                      </Scrollbars>
                     </div>
                   )}
                 </Droppable>

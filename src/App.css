@@ -3,5 +3,5 @@
   width: 100%;
   display: flex;
   justify-content: flex-start;
-  min-height: 100vh;
+  height: 100vh;
 }

@@ -38,10 +38,9 @@ body {
 
 .task-list {
   display: flex;
-
   flex-direction: column;
   background: #f3f3f3;
-  min-width: 300px;
+  min-width: 260px;
   border-radius: 5px;
   padding: 10px 7px;
   margin-right: 7px;
@@ -63,7 +62,7 @@ body {
   padding: 0 10px;
   height: auto;
   border-radius: 5px;
-  max-width: 311px;
+  width: 237px;
   background: white;
   margin-top: 7px;
 }
