@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import UpdateTodos from "../Components/UpdateTodos/UpdateTodos";
+import ChangeBackground from "../Components/ChangeBackground/ChangeBackground";
 import "./style.css";
 
 import axios from "axios";
@@ -11,7 +12,6 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
 import TaskCard from "./TaskCard";
 import { Scrollbars } from "react-custom-scrollbars";
-
 function Trello(props) {
   const [datas, setDatas] = useState([]);
   const [dataUsers, setDataUsers] = useState([]);
@@ -157,14 +157,8 @@ function Trello(props) {
     }
   };
 
-  const listRef = useRef();
-  const handleScroll = ({ target }) => {
-    const { scrollTop } = target;
-
-    listRef.current.scrollTo(scrollTop);
-  };
   return (
-    <div>
+    <div className="main">
       <DragDropContext
         onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
       >
@@ -180,13 +174,9 @@ function Trello(props) {
                       {...provided.droppableProps}
                     >
                       <div className="title">{column.title}</div>
-                      <Scrollbars
-                        style={{ width: 250, height: 750 }}
-                        onScroll={handleScroll}
-                      >
+                      <Scrollbars style={{ width: 250, height: 1000 }}>
                         {column.items.map((item, index) => (
                           <TaskCard
-                            ref={listRef}
                             key={index}
                             item={item}
                             index={index}
@@ -201,6 +191,9 @@ function Trello(props) {
               );
             })}
           </div>
+        </div>
+        <div>
+          <ChangeBackground />
         </div>
       </DragDropContext>
 

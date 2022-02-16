@@ -1,7 +1,7 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 
-function TaskCard({ item, index, handleShow, ref }) {
+function TaskCard({ item, index, handleShow }) {
   return (
     <Draggable key={item.id} draggableId={item.id.toString()} index={index}>
       {(provided) => (
@@ -11,7 +11,6 @@ function TaskCard({ item, index, handleShow, ref }) {
           {...provided.dragHandleProps}
         >
           <div
-            // ref={ref}
             className="task-information"
             id={item.id}
             onClick={(e) => handleShow(e.target)}

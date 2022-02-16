@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Button, Modal } from "react-bootstrap";
+import "./style.css";
 
 function UpdateTodos(props) {
   return (
@@ -18,7 +19,7 @@ function UpdateTodos(props) {
               <label>Title:</label>
               <input
                 type="text"
-                className="form-control"
+                className="select"
                 {...props.register("title")}
               />
               {props.errors.title && (
@@ -27,14 +28,14 @@ function UpdateTodos(props) {
             </div>
             <div className="status">
               <label>Status:</label>
-              <select {...props.register("completed")}>
+              <select className="select" {...props.register("completed")}>
                 <option value={false}>Incomplete</option>
                 <option value={true}>Completed</option>
               </select>
             </div>
-            <div>
+            <div className="SelectOption">
               <label>Assignee:</label>
-              <select {...props.register("assignee")}>
+              <select className="select" {...props.register("assignee")}>
                 {props.dataUsers?.map((data, index) => (
                   <option key={index} value={data.name}>
                     {data.name}

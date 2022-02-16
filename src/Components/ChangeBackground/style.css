@@ -1,0 +1,18 @@
+.img-container {
+  display: flex;
+}
+
+.change-background {
+  width: 70px;
+  height: 70px;
+  margin-left: 15px;
+}
+
+.change-background:hover {
+  border: 2px solid orange;
+}
+
+.btn {
+  margin-left: 22px;
+  margin-top: 10px;
+}

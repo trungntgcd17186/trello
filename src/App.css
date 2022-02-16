@@ -1,7 +1,9 @@
 .App {
-  background-image: url("https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2179x1600/280ea122cb165676b8ae7207c5179af9/photo-1643906229952-b3702e1a6b01.jpg");
+  background-image: url("https://phunugioi.com/wp-content/uploads/2020/02/background-dep-chat-luong-cao.jpg");
   width: 100%;
   display: flex;
   justify-content: flex-start;
   height: 100vh;
+  background-size: cover;
+  background-repeat: no-repeat;
 }

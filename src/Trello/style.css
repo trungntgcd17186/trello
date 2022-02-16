@@ -2,6 +2,10 @@ body {
   font-size: 14px;
 }
 
+.main {
+  display: flex;
+}
+
 .container {
   display: flex;
 }
