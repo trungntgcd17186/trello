@@ -2,9 +2,9 @@ import Trello from "./Trello/Trello";
 import "./App.css";
 
 const handleMouseMove = (e) => {
-  e.target.style.backgroundPosition = `calc(50% + -${
+  e.target.style.backgroundPosition = `calc(-${
     e.nativeEvent.offsetX / 200
-  }px) calc(50% + -${e.nativeEvent.offsetY / 200}px)`;
+  }px) calc(-${e.nativeEvent.offsetY / 200}px)`;
 };
 
 function App() {
