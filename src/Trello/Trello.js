@@ -28,26 +28,25 @@ function Trello(props) {
 
   // Xử lý get data api todos list
   useEffect(() => {
-    axios.get("https://trello-tenomad.herokuapp.com/todos").then((response) => {
+    axios.get("http://localhost:3001/todos").then((response) => {
       setDatas(response.data);
     });
   }, [edit]);
 
+  //Lấy dữ liệu theo id button
+  useEffect(() => {
+    axios.get(`http://localhost:3001/todos/${getDataById}`).then((response) => {
+      reset(response.data);
+    });
+  }, [getDataById]);
+
+  console.log(getDataById);
   //Xử lý get data api users
   useEffect(() => {
-    axios.get("https://trello-tenomad.herokuapp.com/users").then((response) => {
+    axios.get("http://localhost:3001/users").then((response) => {
       setDataUsers(response.data);
     });
   }, []);
-
-  //Lấy dữ liệu theo id button
-  useEffect(() => {
-    axios
-      .get(`https://trello-tenomad.herokuapp.com/todos/${getDataById}`)
-      .then((response) => {
-        reset(response.data);
-      });
-  }, [getDataById]);
 
   //Xử lý validate input
   const schema = yup.object().shape({
@@ -74,10 +73,7 @@ function Trello(props) {
 
   //Xử lý Edit api
   const EditData = async (data) => {
-    await axios.put(
-      `https://trello-tenomad.herokuapp.com/todos/${getDataById}`,
-      data
-    );
+    await axios.put(`http://localhost:3001/todos/${getDataById}`, data);
     setEdit(!edit);
   };
 
@@ -130,17 +126,14 @@ function Trello(props) {
 
       //Xử lý chức năng thay đổi status completed (true <-> false) sau khi drop.
       axios
-        .get(`https://trello-tenomad.herokuapp.com/todos/${result.draggableId}`)
+        .get(`http://localhost:3001/todos/${result.draggableId}`)
         .then((response) => {
           const data = response.data;
           const dataComplete = response.data.completed;
-          axios.put(
-            `https://trello-tenomad.herokuapp.com/todos/${result.draggableId}`,
-            {
-              ...data,
-              completed: !dataComplete,
-            }
-          );
+          axios.put(`http://localhost:3001/todos/${result.draggableId}`, {
+            ...data,
+            completed: !dataComplete,
+          });
         });
     } else {
       const column = columns[source.droppableId];

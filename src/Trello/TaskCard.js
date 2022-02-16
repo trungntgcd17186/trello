@@ -15,7 +15,9 @@ function TaskCard({ item, index, handleShow }) {
             id={item.id}
             onClick={(e) => handleShow(e.target)}
           >
-            <p>{item.title}</p>
+            <p id={item.id} onClick={(e) => handleShow(e.target)}>
+              {item.title}
+            </p>
           </div>
         </div>
       )}
