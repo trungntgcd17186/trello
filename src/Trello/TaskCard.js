@@ -1,6 +1,5 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
-import LazyLoad from "react-lazyload";
 
 function TaskCard({ item, index, handleShow }) {
   const Loading = () => (
