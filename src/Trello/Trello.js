@@ -12,6 +12,8 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
 import TaskCard from "./TaskCard";
 import { Scrollbars } from "react-custom-scrollbars";
+import LazyLoad from "react-lazyload";
+
 function Trello(props) {
   const [datas, setDatas] = useState([]);
   const [dataUsers, setDataUsers] = useState([]);
@@ -19,6 +21,7 @@ function Trello(props) {
   const [show, setShow] = useState(false);
   const [id, setId] = useState("");
 
+  const [loadMore, setLoadMore] = useState(5);
   //Xử lý show modal
   const handleShow = (e) => {
     setShow(true);
@@ -161,12 +164,21 @@ function Trello(props) {
 
   useEffect(() => {
     document.querySelector(".task-list0").style.height =
-      document.querySelector(".column0").clientHeight + 50 + "px";
+      document.querySelector(".column0").clientHeight + 60 + "px";
 
     document.querySelector(".task-list1").style.height =
-      document.querySelector(".column1").clientHeight + 50 + "px";
+      document.querySelector(".column1").clientHeight + 60 + "px";
   });
 
+  // const Loading = () => (
+  //   <div className="post loading">
+  //     <h5>Loading...</h5>
+  //   </div>
+  // );
+
+  const handleLoadMore = () => {
+    setLoadMore(loadMore + 5);
+  };
   return (
     <div className="main">
       <DragDropContext
@@ -186,14 +198,27 @@ function Trello(props) {
                       <div className="title">{column.title}</div>
                       <Scrollbars style={{ width: 250, height: 1000 }}>
                         <div className={"column" + index}>
-                          {column.items.map((item, index) => (
-                            <TaskCard
-                              key={index}
-                              item={item}
-                              index={index}
-                              handleShow={handleShow}
-                            />
-                          ))}
+                          {column.items.map((item, index) =>
+                            index < loadMore ? (
+                              <TaskCard
+                                key={index}
+                                item={item}
+                                index={index}
+                                handleShow={handleShow}
+                              />
+                            ) : (
+                              ""
+                            )
+                          )}
+                          <div className="btn-container">
+                            <button
+                              className="btn-loadMore"
+                              onClick={handleLoadMore}
+                            >
+                              Load More...
+                            </button>
+                          </div>
+
                           {provided.placeholder}
                         </div>
                       </Scrollbars>

@@ -86,3 +86,14 @@ body {
 .task-information > p {
   margin-top: 5px;
 }
+
+.btn-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-loadMore {
+  background-color: rgb(10, 183, 196);
+  margin-top: 10px;
+}

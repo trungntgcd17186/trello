@@ -1,7 +1,13 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
+import LazyLoad from "react-lazyload";
 
 function TaskCard({ item, index, handleShow }) {
+  const Loading = () => (
+    <div className="post loading">
+      <h5>Loading...</h5>
+    </div>
+  );
   return (
     <Draggable key={item.id} draggableId={item.id.toString()} index={index}>
       {(provided) => (
