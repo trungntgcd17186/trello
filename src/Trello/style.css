@@ -36,11 +36,9 @@ body {
 .task-column {
   margin: 8px;
   display: flex;
-  width: 50%;
-  height: auto;
 }
 
-.task-list {
+.task-list0 {
   display: flex;
   flex-direction: column;
   background: #f3f3f3;
@@ -48,6 +46,21 @@ body {
   border-radius: 5px;
   padding: 10px 7px;
   margin-right: 7px;
+  max-height: 945px;
+}
+.task-list1 {
+  display: flex;
+  flex-direction: column;
+  background: #f3f3f3;
+  min-width: 260px;
+  border-radius: 5px;
+  padding: 10px 7px;
+  margin-right: 7px;
+  max-height: 945px;
+}
+
+.abc1 {
+  height: auto;
 }
 
 .title {

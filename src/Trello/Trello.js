@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import UpdateTodos from "../Components/UpdateTodos/UpdateTodos";
 import ChangeBackground from "../Components/ChangeBackground/ChangeBackground";
 import "./style.css";
@@ -17,12 +17,12 @@ function Trello(props) {
   const [dataUsers, setDataUsers] = useState([]);
 
   const [show, setShow] = useState(false);
-  const [getDataById, setGetDataById] = useState("");
-  const [edit, setEdit] = useState(false);
+  const [id, setId] = useState("");
+
   //Xử lý show modal
   const handleShow = (e) => {
     setShow(true);
-    setGetDataById(e.id);
+    setId(e.id);
   };
   const handleClose = () => setShow(false);
 
@@ -31,7 +31,7 @@ function Trello(props) {
     axios.get("https://trello-tenomad.herokuapp.com/todos").then((response) => {
       setDatas(response.data);
     });
-  }, [edit]);
+  }, []);
 
   //Xử lý get data api users
   useEffect(() => {
@@ -43,11 +43,11 @@ function Trello(props) {
   //Lấy dữ liệu theo id button
   useEffect(() => {
     axios
-      .get(`https://trello-tenomad.herokuapp.com/todos/${getDataById}`)
+      .get(`https://trello-tenomad.herokuapp.com/todos/${id}`)
       .then((response) => {
         reset(response.data);
       });
-  }, [getDataById]);
+  }, [id]);
 
   //Xử lý validate input
   const schema = yup.object().shape({
@@ -74,11 +74,17 @@ function Trello(props) {
 
   //Xử lý Edit api
   const EditData = async (data) => {
-    await axios.put(
-      `https://trello-tenomad.herokuapp.com/todos/${getDataById}`,
-      data
-    );
-    setEdit(!edit);
+    await axios
+      .put(`https://trello-tenomad.herokuapp.com/todos/${id}`, data)
+      .then((res) => {
+        const newDatas = datas.map((task) => {
+          if (task.id === res.data.id) {
+            return res.data;
+          }
+          return task;
+        });
+        setDatas(newDatas);
+      });
   };
 
   //Xử lý cột và lưu vị trí drag drop
@@ -129,19 +135,15 @@ function Trello(props) {
       });
 
       //Xử lý chức năng thay đổi status completed (true <-> false) sau khi drop.
-      axios
-        .get(`https://trello-tenomad.herokuapp.com/todos/${result.draggableId}`)
-        .then((response) => {
-          const data = response.data;
-          const dataComplete = response.data.completed;
-          axios.put(
-            `https://trello-tenomad.herokuapp.com/todos/${result.draggableId}`,
-            {
-              ...data,
-              completed: !dataComplete,
-            }
-          );
-        });
+      console.log(result.draggableId);
+      const dataComplete = datas[result.draggableId - 1].completed;
+      axios.put(
+        `https://trello-tenomad.herokuapp.com/todos/${result.draggableId}`,
+        {
+          ...datas[result.draggableId - 1],
+          completed: !dataComplete,
+        }
+      );
     } else {
       const column = columns[source.droppableId];
       const copiedItems = [...column.items];
@@ -157,6 +159,14 @@ function Trello(props) {
     }
   };
 
+  useEffect(() => {
+    document.querySelector(".task-list0").style.height =
+      document.querySelector(".column0").clientHeight + 50 + "px";
+
+    document.querySelector(".task-list1").style.height =
+      document.querySelector(".column1").clientHeight + 50 + "px";
+  });
+
   return (
     <div className="main">
       <DragDropContext
@@ -169,21 +179,23 @@ function Trello(props) {
                 <Droppable key={columnId} droppableId={columnId}>
                   {(provided, snapshot) => (
                     <div
-                      className="task-list"
+                      className={"task-list" + index}
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                     >
                       <div className="title">{column.title}</div>
                       <Scrollbars style={{ width: 250, height: 1000 }}>
-                        {column.items.map((item, index) => (
-                          <TaskCard
-                            key={index}
-                            item={item}
-                            index={index}
-                            handleShow={handleShow}
-                          />
-                        ))}
-                        {provided.placeholder}
+                        <div className={"column" + index}>
+                          {column.items.map((item, index) => (
+                            <TaskCard
+                              key={index}
+                              item={item}
+                              index={index}
+                              handleShow={handleShow}
+                            />
+                          ))}
+                          {provided.placeholder}
+                        </div>
                       </Scrollbars>
                     </div>
                   )}
