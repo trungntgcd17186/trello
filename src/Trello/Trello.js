@@ -12,7 +12,6 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
 import TaskCard from "./TaskCard";
 import { Scrollbars } from "react-custom-scrollbars";
-import LazyLoad from "react-lazyload";
 
 function Trello(props) {
   const [datas, setDatas] = useState([]);
