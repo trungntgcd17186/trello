@@ -93,7 +93,8 @@ body {
   align-items: center;
 }
 
-.btn-loadMore {
+#btn-loadMore0,
+#btn-loadMore1 {
   background-color: rgb(10, 183, 196);
   margin-top: 10px;
 }

@@ -20,7 +20,6 @@ function Trello(props) {
   const [show, setShow] = useState(false);
   const [id, setId] = useState("");
 
-  const [loadMore, setLoadMore] = useState(5);
   //Xử lý show modal
   const handleShow = (e) => {
     setShow(true);
@@ -175,9 +174,20 @@ function Trello(props) {
   //   </div>
   // );
 
-  const handleLoadMore = () => {
-    setLoadMore(loadMore + 5);
+  const [loadMoreTodo, setLoadMoreTodo] = useState(5);
+  const [loadMoreCompleted, setLoadMoreCompleted] = useState(5);
+
+  //Xử lý load more column riêng biệt.
+  const handleLoadMore = (e) => {
+    console.log(e.target.id);
+    if (e.target.id === "btn-loadMore0") {
+      setLoadMoreTodo(loadMoreTodo + 5);
+    }
+    if (e.target.id === "btn-loadMore1") {
+      setLoadMoreCompleted(loadMoreCompleted + 5);
+    }
   };
+
   return (
     <div className="main">
       <DragDropContext
@@ -197,27 +207,43 @@ function Trello(props) {
                       <div className="title">{column.title}</div>
                       <Scrollbars style={{ width: 250, height: 1000 }}>
                         <div className={"column" + index}>
-                          {column.items.map((item, index) =>
-                            index < loadMore ? (
-                              <TaskCard
-                                key={index}
-                                item={item}
-                                index={index}
-                                handleShow={handleShow}
-                              />
-                            ) : (
-                              ""
-                            )
-                          )}
+                          {console.log(column)}
+                          {column.title == "To-do"
+                            ? column.items.map((item, index) =>
+                                index < loadMoreTodo ? (
+                                  <TaskCard
+                                    key={index}
+                                    item={item}
+                                    index={index}
+                                    handleShow={handleShow}
+                                  />
+                                ) : (
+                                  ""
+                                )
+                              )
+                            : ""}
+                          {column.title == "Completed"
+                            ? column.items.map((item, index) =>
+                                index < loadMoreCompleted ? (
+                                  <TaskCard
+                                    key={index}
+                                    item={item}
+                                    index={index}
+                                    handleShow={handleShow}
+                                  />
+                                ) : (
+                                  ""
+                                )
+                              )
+                            : ""}
                           <div className="btn-container">
                             <button
-                              className="btn-loadMore"
-                              onClick={handleLoadMore}
+                              id={"btn-loadMore" + index}
+                              onClick={(e) => handleLoadMore(e)}
                             >
                               Load More...
                             </button>
                           </div>
-
                           {provided.placeholder}
                         </div>
                       </Scrollbars>
