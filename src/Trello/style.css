@@ -46,7 +46,7 @@ body {
   border-radius: 5px;
   padding: 10px 7px;
   margin-right: 7px;
-  max-height: 945px;
+  max-height: calc(100vh - 50px);
 }
 .task-list1 {
   display: flex;
@@ -56,7 +56,7 @@ body {
   border-radius: 5px;
   padding: 10px 7px;
   margin-right: 7px;
-  max-height: 945px;
+  max-height: calc(100vh - 50px);
 }
 
 .abc1 {
@@ -95,6 +95,24 @@ body {
 
 #btn-loadMore0,
 #btn-loadMore1 {
-  background-color: rgb(10, 183, 196);
-  margin-top: 10px;
+  position: fixed;
+  margin-top: -10px;
+  background-color: #ddd;
+  border-radius: 2px;
+  display: block;
+  text-align: center;
+  height: 25px;
+  font-size: 0.875rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out,
+    color 0.3s ease-in-out;
+}
+
+#btn-loadMore0:hover,
+#btn-loadMore1:hover {
+  background-color: #ff7ba9;
+  color: #fff;
 }

@@ -162,10 +162,10 @@ function Trello(props) {
 
   useEffect(() => {
     document.querySelector(".task-list0").style.height =
-      document.querySelector(".column0").clientHeight + 60 + "px";
+      document.querySelector(".column0").clientHeight + 80 + "px";
 
     document.querySelector(".task-list1").style.height =
-      document.querySelector(".column1").clientHeight + 60 + "px";
+      document.querySelector(".column1").clientHeight + 80 + "px";
   });
 
   // const Loading = () => (
@@ -174,8 +174,8 @@ function Trello(props) {
   //   </div>
   // );
 
-  const [loadMoreTodo, setLoadMoreTodo] = useState(5);
-  const [loadMoreCompleted, setLoadMoreCompleted] = useState(5);
+  const [loadMoreTodo, setLoadMoreTodo] = useState(10);
+  const [loadMoreCompleted, setLoadMoreCompleted] = useState(10);
 
   //Xử lý load more column riêng biệt.
   const handleLoadMore = (e) => {
@@ -198,17 +198,16 @@ function Trello(props) {
             {Object.entries(columns).map(([columnId, column], index) => {
               return (
                 <Droppable key={columnId} droppableId={columnId}>
-                  {(provided, snapshot) => (
+                  {(provided) => (
                     <div
                       className={"task-list" + index}
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                     >
                       <div className="title">{column.title}</div>
-                      <Scrollbars style={{ width: 250, height: 1000 }}>
+                      <Scrollbars style={{ width: 250 }}>
                         <div className={"column" + index}>
-                          {console.log(column)}
-                          {column.title == "To-do"
+                          {column.title === "To-do"
                             ? column.items.map((item, index) =>
                                 index < loadMoreTodo ? (
                                   <TaskCard
@@ -222,7 +221,7 @@ function Trello(props) {
                                 )
                               )
                             : ""}
-                          {column.title == "Completed"
+                          {column.title === "Completed"
                             ? column.items.map((item, index) =>
                                 index < loadMoreCompleted ? (
                                   <TaskCard
@@ -236,17 +235,18 @@ function Trello(props) {
                                 )
                               )
                             : ""}
-                          <div className="btn-container">
-                            <button
-                              id={"btn-loadMore" + index}
-                              onClick={(e) => handleLoadMore(e)}
-                            >
-                              Load More...
-                            </button>
-                          </div>
+
                           {provided.placeholder}
                         </div>
                       </Scrollbars>
+                      <div className="btn-container">
+                        <button
+                          id={"btn-loadMore" + index}
+                          onClick={(e) => handleLoadMore(e)}
+                        >
+                          Load More...
+                        </button>
+                      </div>
                     </div>
                   )}
                 </Droppable>
