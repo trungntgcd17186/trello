@@ -2,13 +2,8 @@ import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 
 function TaskCard({ item, index, handleShow }) {
-  const Loading = () => (
-    <div className="post loading">
-      <h5>Loading...</h5>
-    </div>
-  );
   return (
-    <Draggable key={item.id} draggableId={item.id.toString()} index={index}>
+    <Draggable key={item.id} draggableId={item.id + ""} index={index}>
       {(provided) => (
         <div
           ref={provided.innerRef}

@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from "react";
 import UpdateTodos from "../Components/UpdateTodos/UpdateTodos";
-import ChangeBackground from "../Components/ChangeBackground/ChangeBackground";
+import ChangeBackground from "../Components/ModalChangeBackground/ModalChangeBackground";
 import "./style.css";
 
-import axios from "axios";
 import { useForm } from "react-hook-form";
-import yup from "../Components/Validate/yupGlobal";
+import yup from "./Validate/yupGlobal";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
-import TaskCard from "./TaskCard";
+import TaskCard from "../Components/TaskCard/TaskCard";
 import { Scrollbars } from "react-custom-scrollbars";
+
+import {
+  getTodos,
+  getUsers,
+  getTodoFollowId,
+  editTodo,
+  onDropEditTodo,
+} from "../api/index";
 
 function Trello(props) {
   const [datas, setDatas] = useState([]);
@@ -27,27 +34,28 @@ function Trello(props) {
   };
   const handleClose = () => setShow(false);
 
-  // Xử lý get data api todos list
+  const fetchDataTodos = async () => {
+    const response = await getTodos();
+    setDatas(response.data);
+  };
+
+  const fetchDataUsers = async () => {
+    const response = await getUsers();
+    setDataUsers(response.data);
+  };
+
   useEffect(() => {
-    axios.get("https://trello-tenomad.herokuapp.com/todos").then((response) => {
-      setDatas(response.data);
-    });
+    fetchDataTodos();
+    fetchDataUsers();
   }, []);
 
-  //Xử lý get data api users
-  useEffect(() => {
-    axios.get("https://trello-tenomad.herokuapp.com/users").then((response) => {
-      setDataUsers(response.data);
-    });
-  }, []);
-
+  const fetchTodoFollowId = async () => {
+    const response = await getTodoFollowId(id);
+    reset(response.data);
+  };
   //Lấy dữ liệu theo id button
   useEffect(() => {
-    axios
-      .get(`https://trello-tenomad.herokuapp.com/todos/${id}`)
-      .then((response) => {
-        reset(response.data);
-      });
+    fetchTodoFollowId();
   }, [id]);
 
   //Xử lý validate input
@@ -75,17 +83,15 @@ function Trello(props) {
 
   //Xử lý Edit api
   const EditData = async (data) => {
-    await axios
-      .put(`https://trello-tenomad.herokuapp.com/todos/${id}`, data)
-      .then((res) => {
-        const newDatas = datas.map((task) => {
-          if (task.id === res.data.id) {
-            return res.data;
-          }
-          return task;
-        });
-        setDatas(newDatas);
+    await editTodo(id, data).then((res) => {
+      const newDatas = datas.map((task) => {
+        if (task.id === res.data.id) {
+          return res.data;
+        }
+        return task;
       });
+      setDatas(newDatas);
+    });
   };
 
   //Xử lý cột và lưu vị trí drag drop
@@ -136,15 +142,11 @@ function Trello(props) {
       });
 
       //Xử lý chức năng thay đổi status completed (true <-> false) sau khi drop.
-      console.log(result.draggableId);
       const dataComplete = datas[result.draggableId - 1].completed;
-      axios.put(
-        `https://trello-tenomad.herokuapp.com/todos/${result.draggableId}`,
-        {
-          ...datas[result.draggableId - 1],
-          completed: !dataComplete,
-        }
-      );
+      const saveDatas = datas[result.draggableId - 1];
+
+      onDropEditTodo(result.draggableId, saveDatas, dataComplete);
+      //
     } else {
       const column = columns[source.droppableId];
       const copiedItems = [...column.items];
@@ -167,12 +169,6 @@ function Trello(props) {
     document.querySelector(".task-list1").style.height =
       document.querySelector(".column1").clientHeight + 80 + "px";
   });
-
-  // const Loading = () => (
-  //   <div className="post loading">
-  //     <h5>Loading...</h5>
-  //   </div>
-  // );
 
   const [loadMoreTodo, setLoadMoreTodo] = useState(10);
   const [loadMoreCompleted, setLoadMoreCompleted] = useState(10);
@@ -207,35 +203,30 @@ function Trello(props) {
                       <div className="title">{column.title}</div>
                       <Scrollbars style={{ width: 250 }}>
                         <div className={"column" + index}>
-                          {column.title === "To-do"
-                            ? column.items.map((item, index) =>
-                                index < loadMoreTodo ? (
+                          {column.title === "To-do" &&
+                            column.items.map(
+                              (item, index) =>
+                                index < loadMoreTodo && (
                                   <TaskCard
                                     key={index}
                                     item={item}
                                     index={index}
                                     handleShow={handleShow}
                                   />
-                                ) : (
-                                  ""
                                 )
-                              )
-                            : ""}
-                          {column.title === "Completed"
-                            ? column.items.map((item, index) =>
-                                index < loadMoreCompleted ? (
+                            )}
+                          {column.title === "Completed" &&
+                            column.items.map(
+                              (item, index) =>
+                                index < loadMoreCompleted && (
                                   <TaskCard
                                     key={index}
                                     item={item}
                                     index={index}
                                     handleShow={handleShow}
                                   />
-                                ) : (
-                                  ""
                                 )
-                              )
-                            : ""}
-
+                            )}
                           {provided.placeholder}
                         </div>
                       </Scrollbars>

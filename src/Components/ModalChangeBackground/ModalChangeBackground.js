@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import "./style.css";
+import { srcImgData } from "../../Constants/srcImg";
 
 function ChangeBackground(props) {
   const [show, setShow] = useState(false);
@@ -51,36 +52,15 @@ function ChangeBackground(props) {
         </Modal.Header>
         <Modal.Body>
           <div className="img-container">
-            <img
-              className="change-background"
-              alt="hinhnen"
-              onClick={(e) => handleChangeBackground(e)}
-              src="https://tophinhanhdep.com/wp-content/uploads/2021/10/1920X1080-HD-Beach-Desktop-Wallpapers.jpg"
-            />
-            <img
-              className="change-background"
-              alt="hinhnen"
-              onClick={(e) => handleChangeBackground(e)}
-              src="https://i.ytimg.com/vi/iA9WOk654kc/maxresdefault.jpg"
-            />
-            <img
-              className="change-background"
-              alt="hinhnen"
-              onClick={(e) => handleChangeBackground(e)}
-              src="https://wallpaperaccess.com/full/1356282.jpg"
-            />
-            <img
-              className="change-background"
-              alt="hinhnen"
-              onClick={(e) => handleChangeBackground(e)}
-              src="http://3.bp.blogspot.com/-xNHvv4ojNYU/UxLmhstnhLI/AAAAAAAAIQY/n8KRpyx5gz0/s1600/Dragon-Ball-SonGoku-Desktop-Wallpaper-full-HD-Infographic-BLOG-18.jpg"
-            />
-            <img
-              className="change-background"
-              alt="hinhnen"
-              onClick={(e) => handleChangeBackground(e)}
-              src="https://phunugioi.com/wp-content/uploads/2020/02/background-dep-chat-luong-cao.jpg"
-            />
+            {srcImgData.map((data, index) => (
+              <img
+                key={index}
+                className="change-background"
+                alt="hinhnen"
+                onClick={(e) => handleChangeBackground(e)}
+                src={data.srcImg}
+              />
+            ))}
           </div>
         </Modal.Body>
         <Modal.Footer>
