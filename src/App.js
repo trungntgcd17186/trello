@@ -1,4 +1,4 @@
-import Trello from "./Trello/Trello";
+import Trello from "./Trello";
 import React, { useState } from "react";
 import "./App.css";
 import { defaultSrcImg } from "../src/Constants/index";

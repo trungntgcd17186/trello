@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import ModalEditTodos from "../Components/ModalEditTodos/ModalEditTodos";
-import ModalChangeBackground from "../Components/ModalChangeBackground/ModalChangeBackground";
+import ModalEditTodos from "../Components/ModalEditTodos";
+import ModalChangeBackground from "../Components/ModalChangeBackground";
 import "./style.css";
 
 import { useForm } from "react-hook-form";
@@ -9,7 +9,7 @@ import yup from "./Validate/yupGlobal";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
-import TaskCard from "../Components/TaskCard/TaskCard";
+import TaskCard from "../Components/TaskCard";
 import { Scrollbars } from "react-custom-scrollbars";
 
 import {
