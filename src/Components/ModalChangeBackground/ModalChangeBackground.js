@@ -1,25 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import "./style.css";
-import { srcImgData } from "../../Constants/srcImg";
+import { srcImgData, defaultSrcImg } from "../../Constants";
 
-function ChangeBackground(props) {
+function ModalChangeBackground(props) {
+  const { setBackground, background, backgroundStorage } = props;
   const [show, setShow] = useState(false);
-
-  const backgroundStorage = localStorage.getItem("myBackground");
-  const [background, setBackground] = useState(
-    backgroundStorage ||
-      "https://tophinhanhdep.com/wp-content/uploads/2021/10/1920X1080-HD-Beach-Desktop-Wallpapers.jpg"
-  );
-
-  useEffect(() => {
-    document.querySelector(".App").style.backgroundImage = `url(${background})`;
-  }, []);
 
   //Xử lý thay đổi hình nền app.
   const handleChangeBackground = (e) => {
     setBackground(e.target.currentSrc);
-    document.querySelector(".App").style.backgroundImage = `url(${background})`;
   };
 
   //Show Modal
@@ -29,9 +19,7 @@ function ChangeBackground(props) {
   //Close Modal, Xử lý set lại hình ảnh cũ (lưu ở localStorage) khi bấm nút Close.
   const handleClose = () => {
     setShow(false);
-    document.querySelector(
-      ".App"
-    ).style.backgroundImage = `url(${backgroundStorage})`;
+    setBackground(backgroundStorage || defaultSrcImg);
   };
 
   //Lưu localStorage khi bấm nút Save.
@@ -58,7 +46,7 @@ function ChangeBackground(props) {
                 className="change-background"
                 alt="hinhnen"
                 onClick={(e) => handleChangeBackground(e)}
-                src={data.srcImg}
+                src={data}
               />
             ))}
           </div>
@@ -76,4 +64,4 @@ function ChangeBackground(props) {
   );
 }
 
-export default ChangeBackground;
+export default ModalChangeBackground;

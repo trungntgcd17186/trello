@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import UpdateTodos from "../Components/UpdateTodos/UpdateTodos";
-import ChangeBackground from "../Components/ModalChangeBackground/ModalChangeBackground";
+import ModalEditTodos from "../Components/ModalEditTodos/ModalEditTodos";
+import ModalChangeBackground from "../Components/ModalChangeBackground/ModalChangeBackground";
 import "./style.css";
 
 import { useForm } from "react-hook-form";
@@ -246,12 +246,16 @@ function Trello(props) {
           </div>
         </div>
         <div>
-          <ChangeBackground />
+          <ModalChangeBackground
+            setBackground={props.setBackground}
+            background={props.background}
+            backgroundStorage={props.backgroundStorage}
+          />
         </div>
       </DragDropContext>
 
       <div>
-        <UpdateTodos
+        <ModalEditTodos
           handleClose={handleClose}
           show={show}
           onOrderSubmit={onOrderSubmit}

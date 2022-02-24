@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Modal } from "react-bootstrap";
 import "./style.css";
 
-function UpdateTodos(props) {
+function ModalEditTodos(props) {
   const {
     show,
     onOrderSubmit,
@@ -67,4 +67,4 @@ function UpdateTodos(props) {
   );
 }
 
-export default UpdateTodos;
+export default ModalEditTodos;
