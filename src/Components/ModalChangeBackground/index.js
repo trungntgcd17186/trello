@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
+import { DEFAULT_SRC_IMG, SRC_IMG_DATA } from "../../Constants";
+import { backgroundStorage } from "../../utils";
 import "./style.css";
-import { srcImgData, defaultSrcImg } from "../../Constants";
 
 function ModalChangeBackground(props) {
-  const { setBackground, background, backgroundStorage } = props;
+  const { setBackground, background } = props;
   const [show, setShow] = useState(false);
 
   //Xử lý thay đổi hình nền app.
@@ -19,7 +20,7 @@ function ModalChangeBackground(props) {
   //Close Modal, Xử lý set lại hình ảnh cũ (lưu ở localStorage) khi bấm nút Close.
   const handleClose = () => {
     setShow(false);
-    setBackground(backgroundStorage || defaultSrcImg);
+    setBackground(backgroundStorage || DEFAULT_SRC_IMG);
   };
 
   //Lưu localStorage khi bấm nút Save.
@@ -40,7 +41,7 @@ function ModalChangeBackground(props) {
         </Modal.Header>
         <Modal.Body>
           <div className="img-container">
-            {srcImgData.map((data, index) => (
+            {SRC_IMG_DATA.map((data, index) => (
               <img
                 key={index}
                 className="change-background"

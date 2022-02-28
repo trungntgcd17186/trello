@@ -2,8 +2,17 @@ import axios from "axios";
 
 const Url = "https://trello-tenomad.herokuapp.com";
 
-const getTodos = async () => {
-  const response = await axios.get(`${Url}/todos`);
+const getTodos = async (limit) => {
+  const response = await axios.get(
+    `${Url}/todos?completed=false&_page=${limit}`
+  );
+  return response;
+};
+
+const getTodosCompleted = async (limit) => {
+  const response = await axios.get(
+    `${Url}/todos?completed=true&_page=${limit}`
+  );
   return response;
 };
 
@@ -30,4 +39,11 @@ const onDropEditTodo = async (id, saveDatas, dataComplete) => {
   return response;
 };
 
-export { getTodos, getUsers, getTodoFollowId, editTodo, onDropEditTodo };
+export {
+  getTodos,
+  getUsers,
+  getTodoFollowId,
+  getTodosCompleted,
+  editTodo,
+  onDropEditTodo,
+};

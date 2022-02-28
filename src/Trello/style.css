@@ -8,6 +8,12 @@ body {
 
 .container {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.column-wrapper {
+  margin-top: 8px;
 }
 
 .list-card-details {
@@ -33,30 +39,18 @@ body {
   margin-top: 20px;
 }
 
-.task-column {
-  margin: 8px;
-  display: flex;
-}
-
 .task-list0 {
-  display: flex;
-  flex-direction: column;
   background: #f3f3f3;
   min-width: 260px;
   border-radius: 5px;
   padding: 10px 7px;
-  margin-right: 7px;
-  max-height: calc(100vh - 50px);
 }
 .task-list1 {
-  display: flex;
-  flex-direction: column;
   background: #f3f3f3;
   min-width: 260px;
   border-radius: 5px;
   padding: 10px 7px;
-  margin-right: 7px;
-  max-height: calc(100vh - 50px);
+  margin-left: -20px;
 }
 
 .abc1 {
@@ -69,6 +63,7 @@ body {
   padding: 2px 10px;
   border-radius: 5px;
   align-self: flex-start;
+  width: fit-content;
 }
 
 .task-information {
@@ -115,4 +110,9 @@ body {
 #btn-loadMore1:hover {
   background-color: #ff7ba9;
   color: #fff;
+}
+
+.scroll {
+  max-height: calc(100vh - 102px);
+  overflow-y: auto;
 }

@@ -1,31 +1,32 @@
-import React, { useEffect, useState } from "react";
-import ModalEditTodos from "../Components/ModalEditTodos";
-import ModalChangeBackground from "../Components/ModalChangeBackground";
-import "./style.css";
-
-import { useForm } from "react-hook-form";
-import yup from "./Validate/yupGlobal";
-
 import { yupResolver } from "@hookform/resolvers/yup";
+import React, { useEffect, useState } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-
-import TaskCard from "../Components/TaskCard";
-import { Scrollbars } from "react-custom-scrollbars";
-
+import { useForm } from "react-hook-form";
 import {
-  getTodos,
-  getUsers,
-  getTodoFollowId,
   editTodo,
+  getTodoFollowId,
+  getTodos,
+  getTodosCompleted,
+  getUsers,
   onDropEditTodo,
 } from "../api/index";
+import ModalChangeBackground from "../Components/ModalChangeBackground";
+import ModalEditTodos from "../Components/ModalEditTodos";
+import TaskCard from "../Components/TaskCard";
+import "./style.css";
+import yup from "./Validate/yupGlobal";
 
 function Trello(props) {
   const [datas, setDatas] = useState([]);
-  const [dataUsers, setDataUsers] = useState([]);
+  const [datasCompleted, setDatasCompleted] = useState([]);
 
+  const [dataUsers, setDataUsers] = useState([]);
   const [show, setShow] = useState(false);
   const [id, setId] = useState("");
+
+  //Set state loadmore
+  const [loadMoreTodo, setLoadMoreTodo] = useState(1);
+  const [loadMoreCompleted, setLoadMoreCompleted] = useState(1);
 
   //Xử lý show modal
   const handleShow = (e) => {
@@ -35,8 +36,12 @@ function Trello(props) {
   const handleClose = () => setShow(false);
 
   const fetchDataTodos = async () => {
-    const response = await getTodos();
+    const response = await getTodos(loadMoreTodo);
     setDatas(response.data);
+  };
+  const fetchDataTodosCompleted = async () => {
+    const response = await getTodosCompleted(loadMoreCompleted);
+    setDatasCompleted(response.data);
   };
 
   const fetchDataUsers = async () => {
@@ -46,6 +51,7 @@ function Trello(props) {
 
   useEffect(() => {
     fetchDataTodos();
+    fetchDataTodosCompleted();
     fetchDataUsers();
   }, []);
 
@@ -91,6 +97,13 @@ function Trello(props) {
         return task;
       });
       setDatas(newDatas);
+      const newDatasCompleted = datasCompleted.map((task) => {
+        if (task.id === res.data.id) {
+          return res.data;
+        }
+        return task;
+      });
+      setDatasCompleted(newDatasCompleted);
     });
   };
 
@@ -98,15 +111,11 @@ function Trello(props) {
   const columnsData = {
     ["column1"]: {
       title: "To-do",
-      items: datas.filter(
-        (task) => task.completed === false || task.completed === "false"
-      ),
+      items: datas,
     },
     ["column2"]: {
       title: "Completed",
-      items: datas.filter(
-        (task) => task.completed === true || task.completed === "true"
-      ),
+      items: datasCompleted,
     },
   };
 
@@ -115,7 +124,7 @@ function Trello(props) {
   //Re-render để lấy giá trị columnsData gán vào columns
   useEffect(() => {
     setColumns(columnsData);
-  }, [datas]);
+  }, [datas, datasCompleted]);
 
   const onDragEnd = (result, columns, setColumns) => {
     if (!result.destination) return;
@@ -162,25 +171,19 @@ function Trello(props) {
     }
   };
 
-  useEffect(() => {
-    document.querySelector(".task-list0").style.height =
-      document.querySelector(".column0").clientHeight + 80 + "px";
-
-    document.querySelector(".task-list1").style.height =
-      document.querySelector(".column1").clientHeight + 80 + "px";
-  });
-
-  const [loadMoreTodo, setLoadMoreTodo] = useState(10);
-  const [loadMoreCompleted, setLoadMoreCompleted] = useState(10);
-
   //Xử lý load more column riêng biệt.
-  const handleLoadMore = (e) => {
-    console.log(e.target.id);
+  const handleLoadMore = async (e) => {
     if (e.target.id === "btn-loadMore0") {
-      setLoadMoreTodo(loadMoreTodo + 5);
+      setLoadMoreTodo(loadMoreTodo + 1);
+      const response = await getTodos(loadMoreTodo + 1);
+      const newTodos = [...datas, ...response.data];
+      setDatas(newTodos);
     }
     if (e.target.id === "btn-loadMore1") {
-      setLoadMoreCompleted(loadMoreCompleted + 5);
+      setLoadMoreCompleted(loadMoreCompleted + 1);
+      const response = await getTodosCompleted(loadMoreCompleted + 1);
+      const newTodos = [...datasCompleted, ...response.data];
+      setDatasCompleted(newTodos);
     }
   };
 
@@ -189,10 +192,10 @@ function Trello(props) {
       <DragDropContext
         onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
       >
-        <div className="container">
-          <div className="task-column">
-            {Object.entries(columns).map(([columnId, column], index) => {
-              return (
+        {Object.entries(columns).map(([columnId, column], index) => {
+          return (
+            <div className="container" key={index}>
+              <div className="column-wrapper">
                 <Droppable key={columnId} droppableId={columnId}>
                   {(provided) => (
                     <div
@@ -201,35 +204,19 @@ function Trello(props) {
                       {...provided.droppableProps}
                     >
                       <div className="title">{column.title}</div>
-                      <Scrollbars style={{ width: 250 }}>
+                      <div className="scroll">
                         <div className={"column" + index}>
-                          {column.title === "To-do" &&
-                            column.items.map(
-                              (item, index) =>
-                                index < loadMoreTodo && (
-                                  <TaskCard
-                                    key={index}
-                                    item={item}
-                                    index={index}
-                                    handleShow={handleShow}
-                                  />
-                                )
-                            )}
-                          {column.title === "Completed" &&
-                            column.items.map(
-                              (item, index) =>
-                                index < loadMoreCompleted && (
-                                  <TaskCard
-                                    key={index}
-                                    item={item}
-                                    index={index}
-                                    handleShow={handleShow}
-                                  />
-                                )
-                            )}
+                          {column.items.map((item, index) => (
+                            <TaskCard
+                              key={index}
+                              item={item}
+                              index={index}
+                              handleShow={handleShow}
+                            />
+                          ))}
                           {provided.placeholder}
                         </div>
-                      </Scrollbars>
+                      </div>
                       <div className="btn-container">
                         <button
                           id={"btn-loadMore" + index}
@@ -241,15 +228,15 @@ function Trello(props) {
                     </div>
                   )}
                 </Droppable>
-              );
-            })}
-          </div>
-        </div>
+              </div>
+            </div>
+          );
+        })}
+
         <div>
           <ModalChangeBackground
             setBackground={props.setBackground}
             background={props.background}
-            backgroundStorage={props.backgroundStorage}
           />
         </div>
       </DragDropContext>

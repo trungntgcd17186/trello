@@ -1,12 +1,12 @@
-import Trello from "./Trello";
 import React, { useState } from "react";
+import { DEFAULT_SRC_IMG } from "../src/Constants/index";
 import "./App.css";
-import { defaultSrcImg } from "../src/Constants/index";
+import Trello from "./Trello";
+import { backgroundStorage } from "./utils";
 
 function App() {
-  const backgroundStorage = localStorage.getItem("myBackground");
   const [background, setBackground] = useState(
-    backgroundStorage || defaultSrcImg
+    backgroundStorage || DEFAULT_SRC_IMG
   );
 
   //Xử lý hiệu ứng di chuột trên background.
@@ -18,14 +18,10 @@ function App() {
   return (
     <div
       className="App"
-      style={{ backgroundImage: "url(" + background + ")" }}
+      style={{ backgroundImage: `url(${background})` }}
       onMouseMove={(e) => handleMouseMove(e)}
     >
-      <Trello
-        setBackground={setBackground}
-        background={background}
-        backgroundStorage={backgroundStorage}
-      />
+      <Trello setBackground={setBackground} background={background} />
     </div>
   );
 }

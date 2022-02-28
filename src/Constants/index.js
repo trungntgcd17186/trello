@@ -1,7 +1,7 @@
-export const defaultSrcImg =
+export const DEFAULT_SRC_IMG =
   "https://tophinhanhdep.com/wp-content/uploads/2021/10/1920X1080-HD-Beach-Desktop-Wallpapers.jpg";
 
-export const srcImgData = [
+export const SRC_IMG_DATA = [
   "https://tophinhanhdep.com/wp-content/uploads/2021/10/1920X1080-HD-Beach-Desktop-Wallpapers.jpg",
   "https://i.ytimg.com/vi/iA9WOk654kc/maxresdefault.jpg",
   "https://wallpaperaccess.com/full/1356282.jpg",
