@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
 import {
@@ -107,18 +107,26 @@ function Trello(props) {
     });
   };
 
+  const todosRef = useRef();
+  const todoCompletedRef = useRef();
+
   //Xử lý cột và lưu vị trí drag drop
   const columnsData = {
     ["column1"]: {
       title: "To-do",
       items: datas,
+      ref: todosRef,
     },
     ["column2"]: {
       title: "Completed",
       items: datasCompleted,
+      ref: todoCompletedRef,
     },
   };
 
+  useEffect(() => {
+    console.log(columnsData);
+  }, []);
   const [columns, setColumns] = useState(columnsData);
 
   //Re-render để lấy giá trị columnsData gán vào columns
@@ -187,6 +195,34 @@ function Trello(props) {
     }
   };
 
+  const handleScroll = async (titleColumn) => {
+    console.log(todosRef.current);
+    if (todosRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = todosRef.current;
+      if (scrollTop + clientHeight === scrollHeight) {
+        //fetchdata
+        if (titleColumn === "To-do") {
+          setLoadMoreTodo(loadMoreTodo + 1);
+          const response = await getTodos(loadMoreTodo + 1);
+          const newTodos = [...datas, ...response.data];
+          setDatas(newTodos);
+        }
+      }
+    }
+    if (todoCompletedRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } =
+        todoCompletedRef.current;
+      if (scrollTop + clientHeight === scrollHeight) {
+        if (titleColumn === "Completed") {
+          setLoadMoreCompleted(loadMoreCompleted + 1);
+          const response = await getTodos(loadMoreCompleted + 1);
+          const newTodosCompleted = [...datasCompleted, ...response.data];
+          setDatasCompleted(newTodosCompleted);
+        }
+      }
+    }
+  };
+
   return (
     <div className="main">
       <DragDropContext
@@ -205,7 +241,11 @@ function Trello(props) {
                     >
                       <div className="title">{column.title}</div>
                       <div className="scroll">
-                        <div className={"column" + index}>
+                        <div
+                          className={"column" + index}
+                          onScroll={() => handleScroll(column.title)}
+                          ref={column.ref}
+                        >
                           {column.items.map((item, index) => (
                             <TaskCard
                               key={index}
