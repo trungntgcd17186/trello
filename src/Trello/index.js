@@ -124,9 +124,6 @@ function Trello(props) {
     },
   };
 
-  useEffect(() => {
-    console.log(columnsData);
-  }, []);
   const [columns, setColumns] = useState(columnsData);
 
   //Re-render để lấy giá trị columnsData gán vào columns
@@ -158,11 +155,6 @@ function Trello(props) {
         },
       });
 
-      //Xử lý chức năng thay đổi status completed (true <-> false) sau khi drop.
-      const dataComplete = datas[result.draggableId - 1].completed;
-      const saveDatas = datas[result.draggableId - 1];
-
-      onDropEditTodo(result.draggableId, saveDatas, dataComplete);
       //
     } else {
       const column = columns[source.droppableId];
@@ -179,28 +171,11 @@ function Trello(props) {
     }
   };
 
-  //Xử lý load more column riêng biệt.
-  const handleLoadMore = async (e) => {
-    if (e.target.id === "btn-loadMore0") {
-      setLoadMoreTodo(loadMoreTodo + 1);
-      const response = await getTodos(loadMoreTodo + 1);
-      const newTodos = [...datas, ...response.data];
-      setDatas(newTodos);
-    }
-    if (e.target.id === "btn-loadMore1") {
-      setLoadMoreCompleted(loadMoreCompleted + 1);
-      const response = await getTodosCompleted(loadMoreCompleted + 1);
-      const newTodos = [...datasCompleted, ...response.data];
-      setDatasCompleted(newTodos);
-    }
-  };
-
   const handleScroll = async (titleColumn) => {
-    console.log(todosRef.current);
     if (todosRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = todosRef.current;
-      if (scrollTop + clientHeight === scrollHeight) {
-        //fetchdata
+
+      if (scrollTop + clientHeight > scrollHeight - 1) {
         if (titleColumn === "To-do") {
           setLoadMoreTodo(loadMoreTodo + 1);
           const response = await getTodos(loadMoreTodo + 1);
@@ -212,10 +187,10 @@ function Trello(props) {
     if (todoCompletedRef.current) {
       const { scrollTop, scrollHeight, clientHeight } =
         todoCompletedRef.current;
-      if (scrollTop + clientHeight === scrollHeight) {
+      if (scrollTop + clientHeight > scrollHeight - 1) {
         if (titleColumn === "Completed") {
           setLoadMoreCompleted(loadMoreCompleted + 1);
-          const response = await getTodos(loadMoreCompleted + 1);
+          const response = await getTodosCompleted(loadMoreCompleted + 1);
           const newTodosCompleted = [...datasCompleted, ...response.data];
           setDatasCompleted(newTodosCompleted);
         }
@@ -240,31 +215,21 @@ function Trello(props) {
                       {...provided.droppableProps}
                     >
                       <div className="title">{column.title}</div>
-                      <div className="scroll">
-                        <div
-                          className={"column" + index}
-                          onScroll={() => handleScroll(column.title)}
-                          ref={column.ref}
-                        >
-                          {column.items.map((item, index) => (
-                            <TaskCard
-                              key={index}
-                              item={item}
-                              index={index}
-                              handleShow={handleShow}
-                            />
-                          ))}
-                          {provided.placeholder}
-                        </div>
+                      <div
+                        className="scroll"
+                        onScroll={() => handleScroll(column.title)}
+                        ref={column.ref}
+                      >
+                        {column.items.map((item, index) => (
+                          <TaskCard
+                            key={index}
+                            item={item}
+                            index={index}
+                            handleShow={handleShow}
+                          />
+                        ))}
                       </div>
-                      <div className="btn-container">
-                        <button
-                          id={"btn-loadMore" + index}
-                          onClick={(e) => handleLoadMore(e)}
-                        >
-                          Load More...
-                        </button>
-                      </div>
+                      {provided.placeholder}
                     </div>
                   )}
                 </Droppable>
