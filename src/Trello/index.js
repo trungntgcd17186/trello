@@ -131,7 +131,7 @@ function Trello(props) {
     setColumns(columnsData);
   }, [datas, datasCompleted]);
 
-  const onDragEnd = (result, columns, setColumns) => {
+  const onDragEnd = async (result, columns, setColumns) => {
     if (!result.destination) return;
     const { source, destination } = result;
     if (source.droppableId !== destination.droppableId) {
@@ -155,7 +155,24 @@ function Trello(props) {
         },
       });
 
-      //
+      const response = await getTodoFollowId(result.draggableId);
+
+      if (
+        response.data.completed === true ||
+        response.data.completed === "true"
+      ) {
+        const dataComplete = datasCompleted[result.draggableId - 1].completed;
+        const saveDatas = datasCompleted[result.draggableId - 1];
+        onDropEditTodo(result.draggableId, saveDatas, dataComplete);
+      }
+      if (
+        response.data.completed === false ||
+        response.data.completed === "false"
+      ) {
+        const dataComplete = datas[result.draggableId - 1].completed;
+        const saveDatas = datas[result.draggableId - 1];
+        onDropEditTodo(result.draggableId, saveDatas, dataComplete);
+      }
     } else {
       const column = columns[source.droppableId];
       const copiedItems = [...column.items];
