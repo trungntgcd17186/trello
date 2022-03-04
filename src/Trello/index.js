@@ -141,19 +141,19 @@ function Trello(props) {
       const sourceItems = [...sourceColumn.items];
       const destItems = [...destColumn.items];
       const [removed] = sourceItems.splice(source.index, 1);
-      destItems.splice(destination.index, 0, removed);
 
-      setColumns({
-        ...columns,
-        [source.droppableId]: {
-          ...sourceColumn,
-          items: sourceItems,
-        },
-        [destination.droppableId]: {
-          ...destColumn,
-          items: destItems,
-        },
-      });
+      const [newItem] = [{ ...removed, completed: !removed.completed }];
+
+      destItems.splice(destination.index, 0, newItem);
+
+      if (sourceColumn.title === "To-do") {
+        setDatas(sourceItems);
+        setDatasCompleted(destItems);
+      }
+      if (sourceColumn.title === "Completed") {
+        setDatas(destItems);
+        setDatasCompleted(sourceItems);
+      }
     } else {
       const column = columns[source.droppableId];
       const copiedItems = [...column.items];
