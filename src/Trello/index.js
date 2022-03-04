@@ -154,25 +154,6 @@ function Trello(props) {
           items: destItems,
         },
       });
-
-      const response = await getTodoFollowId(result.draggableId);
-
-      if (
-        response.data.completed === true ||
-        response.data.completed === "true"
-      ) {
-        const dataComplete = datasCompleted[result.draggableId - 1].completed;
-        const saveDatas = datasCompleted[result.draggableId - 1];
-        onDropEditTodo(result.draggableId, saveDatas, dataComplete);
-      }
-      if (
-        response.data.completed === false ||
-        response.data.completed === "false"
-      ) {
-        const dataComplete = datas[result.draggableId - 1].completed;
-        const saveDatas = datas[result.draggableId - 1];
-        onDropEditTodo(result.draggableId, saveDatas, dataComplete);
-      }
     } else {
       const column = columns[source.droppableId];
       const copiedItems = [...column.items];
