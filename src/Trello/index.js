@@ -167,6 +167,18 @@ function Trello(props) {
         },
       });
     }
+
+    //Ẩn thanh cuộn
+    if (columns.column1.items.length > 13) {
+      todosRef.current.className = "scroll";
+    } else {
+      todosRef.current.className = "hidden";
+    }
+    if (columns.column2.items.length > 13) {
+      todoCompletedRef.current.className = "scroll";
+    } else {
+      todoCompletedRef.current.className = "hidden";
+    }
   };
 
   const handleScroll = async (titleColumn) => {
@@ -214,7 +226,6 @@ function Trello(props) {
                     >
                       <div className="title">{column.title}</div>
                       <div
-                        className="scroll"
                         onScroll={() => handleScroll(column.title)}
                         ref={column.ref}
                       >
